@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import { Order, OrderStatus } from '../models/order';
 
 interface TicketAttrs {
     title: string;
@@ -8,13 +9,14 @@ interface TicketAttrs {
 export interface TicketDoc extends mongoose.Document {
     title: string;
     price: number;
+    isReserved(): Promise<boolean>;
 }
 
 interface TicketModel extends mongoose.Model<TicketDoc> {
     build(attrs: TicketAttrs): TicketDoc;
 }
 
-const ticketSchema = new mongoose.Schema({
+const ticketSchema = new mongoose.Schema<TicketDoc>({
     title: {
         type: String,
         required: true
@@ -44,6 +46,29 @@ const ticketSchema = new mongoose.Schema({
 // Typescript
 ticketSchema.statics.build = (attrs: TicketAttrs) => {
     return new Ticket(attrs);
+}
+
+// While ticketSchema.statics adds a method to model
+// ticketSchema.methods adds a method to the document
+
+// Make sure that this ticket is not already reserved
+// Run query to look at all orders. Find an order what ticket
+// is the ticket we just found *ans* the orders status is not canceled
+// If we find an order from that means the ticket *is* reserved
+ticketSchema.methods.isReserved = async function() {
+    // this === the ticket document that we just called 'isReserved on
+    const existingOrder = await Order.findOne({
+        ticket: this,
+        status: {
+            $in: [
+                OrderStatus.Created,
+                OrderStatus.AwaitingPayment,
+                OrderStatus.Complete
+            ]
+        }
+    });
+
+    return !!existingOrder;
 }
 
 // This associated the Model with the Schema
