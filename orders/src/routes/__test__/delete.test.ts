@@ -1,7 +1,7 @@
 import request from 'supertest';
 import { app } from '../../app';
 import { Ticket } from '../../models/ticket';
-import { Order, OrderStatus } from '../../models/ticket/order';
+import { Order, OrderStatus } from '../../models/order';
 
 it('marks an order as cancelled', async () => {
     // create a ticket with Ticket Model
@@ -31,3 +31,5 @@ it('marks an order as cancelled', async () => {
 
     expect(updatedOrder!.status).toEqual(OrderStatus.Cancelled);
 });
+
+it.todo('emits an order cancelled event')
