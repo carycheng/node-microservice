@@ -2,6 +2,7 @@ import mongoose from 'mongoose';
 import { Order, OrderStatus } from '../models/order';
 
 interface TicketAttrs {
+    id: string;
     title: string;
     price: number;
 }
@@ -45,7 +46,11 @@ const ticketSchema = new mongoose.Schema<TicketDoc>({
 // User Model so we have the interface defined above to help out
 // Typescript
 ticketSchema.statics.build = (attrs: TicketAttrs) => {
-    return new Ticket(attrs);
+    return new Ticket({
+        _id: attrs.id,
+        title: attrs.title,
+        price: attrs.price,
+    });
 }
 
 // While ticketSchema.statics adds a method to model
