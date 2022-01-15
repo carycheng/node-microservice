@@ -5,6 +5,7 @@ import { Ticket } from '../../models/ticket';
 
 const buildTicket = async () => {
     const ticket = Ticket.build({
+        id: 'laskdfj',
         title: 'concert',
         price: 20
     });

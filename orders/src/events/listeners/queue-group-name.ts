@@ -1,3 +1,1 @@
-export const queueGroupName = {
-    
-}
+export const queueGroupName = 'orders-service';
