@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import { updateIfCurrentPlugin } from 'mongoose-update-if-current';
 import { Order, OrderStatus } from '../models/order';
 
 interface TicketAttrs {
@@ -10,6 +11,7 @@ interface TicketAttrs {
 export interface TicketDoc extends mongoose.Document {
     title: string;
     price: number;
+    version: number;
     isReserved(): Promise<boolean>;
 }
 
@@ -35,6 +37,10 @@ const ticketSchema = new mongoose.Schema<TicketDoc>({
         }
     }
 });
+
+ticketSchema.set('versionKey', 'version');
+// @ts-ignore
+ticketSchema.plugin(updateIfCurrentPlugin);
 
 // This works because a Mongo Model wraps a Mongo Schema
 // The nomenclature is to always use statics property to add
