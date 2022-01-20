@@ -43,6 +43,14 @@ ticketSchema.set('versionKey', 'version');
 // @ts-ignore
 ticketSchema.plugin(updateIfCurrentPlugin);
 
+ticketSchema.pre('save', function(done) {
+    this.$where = {
+        version: this.get('version') - 1
+    };
+
+    done();
+});
+
 // This works because a Mongo Model wraps a Mongo Schema
 // The nomenclature is to always use statics property to add
 // methods to a Schema
