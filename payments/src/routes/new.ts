@@ -1,6 +1,5 @@
 import express, { Request, Response } from 'express';
 import { body } from 'express-validator';
-import { natsWrapper } from '../nats-wrapper';
 import {
     requireAuth,
     validateRequest,
@@ -9,6 +8,7 @@ import {
     NotAuthorizedError,
     OrderStatus,
 } from '@msticketsdev/common';
+import { natsWrapper } from '../nats-wrapper';
 import { stripe } from '../stripe';
 import { Order } from '../models/order';
 import { Payment } from '../models/payment';
