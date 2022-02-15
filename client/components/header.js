@@ -1,5 +1,6 @@
 import Link from 'next/link';
 
+//test
 export default ({ currentUser }) => {
     const links = [
         !currentUser && { label: 'Sign Up', href: '/auth/signup' },
